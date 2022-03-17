@@ -11,12 +11,22 @@ for (i in rnorm(10)){
 }
 #Problem 3----
 people <- c(rep("men", 6), rep("women", 8))
+
 choose <- sample(people, size = 5, replace = FALSE)
-for (i in choose){
+
+ResultVector <- NULL
+table (c(ResultVector))
+
+for (i in 1:10000){
+ 
+ print(ResultVector<-c(ResultVector,choose))
+  
+  for (i in choose){
   if (i=="men")
     print (i)
   else 
     print("women")
+}
 }
 
 #Problem 4----
