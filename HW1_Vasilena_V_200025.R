@@ -28,4 +28,21 @@ for (i in 1:10000){
   
 
 #Problem 4----
+  SrikePrice <- 120
+  Profit <- 0
+  Price <- 100
 
+  for (k in 1:1000){
+    Price <- 100
+    for(i in 1:100){
+      Price = c(Price + rnorm(1, mean = 0, sd = 7))
+    }
+  if(Price > 120){
+    Profit = Profit + Price - 120
+  }
+    
+}
+  Profit/1000
+  
+  
+  
