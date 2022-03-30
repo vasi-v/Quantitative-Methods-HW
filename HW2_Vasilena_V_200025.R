@@ -2,25 +2,25 @@
 coin <- c("Head" = 0, "Tails" = 1)
 
 
-for (j in 1:1000){
+  for (j in 1:1000){
   Budget = 100
   Bet = 1
-
-  condition <- while (Budget > 0){
-    
+  
+ while (Budget > 0){
+  
   toss <-sample(coin, 1,replace = TRUE, prob = c(0.514,0.486 ))
   
   if (c(toss)==1){
   Budget = Budget + Bet 
   }
   else {
-  Budget = Budget - Bet*2
+  Budget = Budget - Bet
+  Bet = min(Budget, Bet*2)
   }
-}  
-  if ( (Budget < 0))
-    break 
-}
-
+  print(Budget)
+ } 
+ }
+ 
 
 #Problem 2----
 library(tidyverse)
@@ -113,31 +113,48 @@ vars <- c("year", "month", "day", "dep_delay", "arr_delay")
 
 c <- flights %>% dplyr::select(any_of(vars))
 
-#4:It shows variables with time in their names, nothing surprising. I do not understand the "case by default" questions.
+#4:It shows variables with time in their names, nothing surprising. It is not case sensitive, however we should use ignore.case if we want to minimize errors due to case sensitivity.
 
 surprise <- dplyr::select(flights, contains("TIME"))
 
-
+z <- dplyr::select(flights, contains("TIME", ignore.case = T))
 
 #Ex.5.5.2----
 
-#1 and #2 i found the answers, but i did not understand them
+#1 
 
+new = dplyr::transmute(flights, 
+        dep_time = (dep_time %/% 100) * 60 + (dep_time %% 100),
+        sched_dep_time = (sched_dep_time %/% 100) * 60 + (sched_dep_time %% 100)) 
+
+
+#2:The values of "arr_time - dep_time" are higher.
+
+com <- dplyr::transmute(flights, air_time, air_new = arr_time - dep_time)
+
+fixed <- dplyr::transmute(flights, air_time,
+                          dep_time = (dep_time %/% 100) * 60 + (dep_time %% 100),
+                          arr_time = (arr_time %/% 100) * 60 + (arr_time %% 100),
+                          air_time_new = arr_time - dep_time) 
+  
+  
 #3:When you subtract scheduled dep_time from the actual dep_time you get the dep_delay
 
 compare <- dplyr::select(flights, dep_time, sched_dep_time, dep_delay)
 
-#4:Similar to #1 and #2 found the answers, but did not understand it
+#4
 
-rank <- min_rank(flights$dep_delay)
+top10 = head(dplyr::arrange(flights, desc(min_rank(flights$dep_delay))), n = 10)
+
 
 #5
+
 1:3 + 1:10 
 #Warning message:longer object length is not a multiple of shorter object length
 #for example
 1:3 + 6:8
 
-#6: Angles are in radians
+#6: in radians
 cos(x)
 sin(x)
 tan(x)
