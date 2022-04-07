@@ -65,7 +65,11 @@
 #5.7.1: not done  
   
 # Problem 4----
+  #not done
   
+#I am aware that this homework is not complete.
+#I will try to review the reading materials and to understand the functions.
+
   
   
   
