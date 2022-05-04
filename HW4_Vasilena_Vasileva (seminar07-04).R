@@ -38,7 +38,7 @@ Final <- dates %>%
     ResultM <- data_new %>%
        dplyr::full_join(data_new2, by = NULL) %>%
        dplyr::arrange(symbol)%>%
-       dplyr::arrange(desc(date))
+       dplyr::arrange(dplyr::desc(date))
     
 #Second approach:/seminars/ - correct
     
@@ -46,7 +46,7 @@ Final <- dates %>%
       dplyr::filter((Dates >= lubridate::ymd("2019-01-01") & Dates <= lubridate::ymd("2019-07-01")) |
                     (Dates >= lubridate::ymd("2020-04-01") & Dates <= lubridate::ymd("2020-07-01")),
                     Symbol %in% c("AMZN", "FB")) %>%
-      dplyr::arrange(Symbol, desc(Dates))
+      dplyr::arrange(Symbol, dplyr::desc(Dates))
       
     
 #4:
@@ -67,7 +67,7 @@ select2 <- Final %>%
 #Question: why do we have to rewrite the date? I know that without it nothing will happen,
 #but is it because in the "old" format was too "confusing" for R?
 
-#4 различни варианта за формата на датата /Thanks for your help/
+#Your 4 suggestions for data formatting /Thanks for your help/
 #Date1 = substr( Dates , 1, 7)
 #Date2 = floor_date( Dates, "month")
 #YYYYMM1 = zoo::as.yearmon(Dates)
