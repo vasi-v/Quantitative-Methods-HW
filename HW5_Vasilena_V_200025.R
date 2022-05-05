@@ -53,8 +53,8 @@ data<-tidyquant::tq_get("AAPL")%>%
                 MACDline = EMA12 - EMA26,
                 SignalLine = TTR::EMA(MACDline, n=9))%>%
   dplyr::filter(!is.na(EMA26 & SignalLine)) %>%
-  dplyr::mutate(signal = dplyr::case_when(dplyr::lag(MACDline) > dplyr::lag(SignalLine) & dplyr::lag(MACDline) < dplyr::lag(SignalLine) ~ "sell",
-                                          dplyr::lag(MACDline) < dplyr::lag(SignalLine) & dplyr::lag(MACDline) > dplyr::lag(SignalLine) ~ "buy",
+  dplyr::mutate(signal = dplyr::case_when(dplyr::lag(MACDline) > dplyr::lag(SignalLine) & MACDline < SignalLine ~ "sell",
+                                          dplyr::lag(MACDline) < dplyr::lag(SignalLine) & MACDline > SignalLine ~ "buy",
                                          TRUE ~ "hold"))
 
 #Again as in HW4 SMA task - The function does not find any values
