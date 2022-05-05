@@ -82,8 +82,8 @@ select2 <- Final %>%
                 LagSma10 = dplyr::lag(sma10),
                 LagSma26 = dplyr::lag(sma26)) %>%
   dplyr::filter(!is.na(sma26)) %>%
-  dplyr::mutate(cross = dplyr::case_when(LagSma10 > LagSma26 & LagSma10 < LagSma26 ~ "from above",
-                                         LagSma10 < LagSma26 & LagSma10 > LagSma26 ~ "from below",
+  dplyr::mutate(cross = dplyr::case_when(LagSma10 > LagSma26 & sma10 < sma26 ~ "from above",
+                                         LagSma10 < LagSma26 & sma10 > sma26 ~ "from below",
                                          TRUE ~ "no cross"))
   
 #I do not know why "no crosses" were found.
