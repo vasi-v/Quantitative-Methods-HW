@@ -85,8 +85,6 @@ select2 <- Final %>%
   dplyr::mutate(cross = dplyr::case_when(LagSma10 > LagSma26 & sma10 < sma26 ~ "from above",
                                          LagSma10 < LagSma26 & sma10 > sma26 ~ "from below",
                                          TRUE ~ "no cross"))
-  
-#I do not know why "no crosses" were found.
 
 #Buy signal - when a short-run SMA crosses from below to above a long-run SMA.
 #Sell signal - when a short-run SMA crosses from above to above a long-run SMA.
