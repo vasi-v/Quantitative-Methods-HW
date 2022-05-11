@@ -6,26 +6,38 @@ library(quantmod)
 
 m<- c(2,3,4,1,7,8)
 TTR::SMA(m, n=2)
-
+sma <-NULL
 SMAFunction <- function(inputVector){
-  Denominator = base::length(inputVector)
-  #?Nominator = sum(inputVector-lag(inputVector))
-  Result = Nominator/Denominator
-  return(Result)
+  for (i in 1:base::length(inputVector)){
+  sma <- c(sma, base::mean(inputVector[i:(i-2)]))
+  }
+  return(sma)
 }
 
 SMAFunction(m)
 
-#I think that we need the lag() function 
+#I do not know how to do it
 
 #1.2:
 v <- c(4,8,8,2,3,4)
-cor <- stats::cor(m,v)
+cor <- stats::cor(v,m)
 #correlation coefficient:the ratio between the covariance of two variables 
 #and the product of their standard deviations;value between ???1 and 1.
 
-#I will need further explanations the correlation and covariance/sorry/
+CorFunction <- function(inputVector1, inputVector2){
+     First = base::sum(inputVector1 - base::mean(inputVector1))
+     Second = base::sum(inputVector2 - base::mean(inputVector2))
+     Nominator = base::mean(First*Second)
+     Denominator = stats::sd(inputVector1)*stats::sd(inputVector2)
+     Final = Nominator/Denominator
+     return(Final)
+}
+  
+CorFunction(v,m)
 
+#I tried to write the function, however the results from the inbuilt function and 
+#from my function are different
+#Maybe I have misunderstood the formula
 
 #Problem 2----
 
@@ -33,10 +45,10 @@ cor <- stats::cor(m,v)
 #A prime number is a whole number greater than 1 with only two factors – themselves and 1.
 #A prime number cannot be divided by any other positive integers without leaving a remainder, decimal or fraction.
 
-Prime_num <- for (i in 2:n){
-    
-  }
+n <- 1:100
+Prime_num <- for (i in n){
   
+}
 
 
 
@@ -54,11 +66,16 @@ data<-tidyquant::tq_get("AAPL")%>%
                 SignalLine = TTR::EMA(MACDline, n=9))%>%
   dplyr::filter(!is.na(EMA26 & SignalLine)) %>%
   dplyr::mutate(signal = dplyr::case_when(dplyr::lag(MACDline) > dplyr::lag(SignalLine) & MACDline < SignalLine ~ "sell",
-                                          dplyr::lag(MACDline) < dplyr::lag(SignalLine) & MACDline > SignalLine ~ "buy",
-                                         TRUE ~ "hold"))
+                                          TRUE ~"buy"))
 
-#Again as in HW4 SMA task - The function does not find any values
-#for which the TRUE conditions are implemented
-#Everything is "hold"
+data2 <- data %>%dplyr::mutate(BenchmarkMoney = 100,
+                      sss = adjusted/ lag(adjusted),
+                      sss= ifelse(is.na(sss), 1, sss),
+                      BenchmarkMoney1 = cumprod(sss),
+                      StrategyMoney = 100)
+                      
 
+options(scripen = 999)
+
+#still not complete
                 
