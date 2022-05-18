@@ -23,7 +23,7 @@ SMAFunction(m,n)
 v <- c(4,8,8,2,3,4)
 cor <- stats::cor(v,m)
 #correlation coefficient:the ratio between the covariance of two variables 
-#and the product of their standard deviations;value between ???1 and 1.
+#and the product of their standard deviations;value between -1 and 1.
 
 CorFunction <- function(inputVector1, inputVector2){
      First = inputVector1 - base::mean(inputVector1)
@@ -40,7 +40,7 @@ CorFunction(v,m)
 #Problem 2----
 
 #Prime numbers less then 100: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97
-#A prime number is a whole number greater than 1 with only two factors – themselves and 1.
+#A prime number is a whole number greater than 1 with only two factors â€“ themselves and 1.
 #A prime number cannot be divided by any other positive integers without leaving a remainder, decimal or fraction.
 
 n <- 1:100
