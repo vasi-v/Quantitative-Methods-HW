@@ -2,21 +2,22 @@ library(quantmod)
 
 #Problem 1----
 
-#1.1: Attempt:?
+#1.1:
 
 m<- c(2,3,4,1,7,8)
 TTR::SMA(m, n=2)
 sma <-NULL
-SMAFunction <- function(inputVector){
-  for (i in 1:base::length(inputVector)){
-  sma <- c(sma, base::mean(inputVector[i:(i-2)]))
+n <- 2
+SMAFunction <- function(inputVector,n){
+  for (i in n:base::length(inputVector)){
+  sma <- c(sma, base::mean(inputVector[i:(i-n+1)]))
   }
   return(sma)
 }
 
-SMAFunction(m)
+SMAFunction(m,n)
 
-#I do not know how to do it
+#works, but does not return NA
 
 #1.2:
 v <- c(4,8,8,2,3,4)
@@ -25,9 +26,9 @@ cor <- stats::cor(v,m)
 #and the product of their standard deviations;value between ???1 and 1.
 
 CorFunction <- function(inputVector1, inputVector2){
-     First = base::sum(inputVector1 - base::mean(inputVector1))
-     Second = base::sum(inputVector2 - base::mean(inputVector2))
-     Nominator = base::mean(First*Second)
+     First = inputVector1 - base::mean(inputVector1)
+     Second = inputVector2 - base::mean(inputVector2)
+     Nominator = base::sum(First*Second)/(base::length(inputVector1) - 1)
      Denominator = stats::sd(inputVector1)*stats::sd(inputVector2)
      Final = Nominator/Denominator
      return(Final)
@@ -35,9 +36,6 @@ CorFunction <- function(inputVector1, inputVector2){
   
 CorFunction(v,m)
 
-#I tried to write the function, however the results from the inbuilt function and 
-#from my function are different
-#Maybe I have misunderstood the formula
 
 #Problem 2----
 
@@ -46,20 +44,38 @@ CorFunction(v,m)
 #A prime number cannot be divided by any other positive integers without leaving a remainder, decimal or fraction.
 
 n <- 1:100
-Prime_num <- for (i in n){
-  
+Prime_num <- for (k in n){
+  for (i in 2:(k-1)){
+    if (base::isTRUE(k %% i == 0)){
+      print(k)
+    } else {
+      print("not prime")
+    }
+}
 }
 
-
-
-#again i was not able to solve it/found a lot of things in the internet tho/
+#still not able to do the loop :/
+#the results after running it are...strange 
 
 #Problem 3----
 
 library(tidyquant)
 library(tidyverse)
 
-data<-tidyquant::tq_get("AAPL")%>%
+data <- tidyquant::tq_get("AAPL",from = lubridate::ymd("2012-01-03"),
+                                to = lubridate::ymd("2022-05-16"))%>%
+        dplyr::select(symbol, date, adjusted)
+
+dates2 <- base::data.frame(Dates = base::rep(base::seq.Date(from = lubridate::ymd("2012-01-03"),
+                                                         to = lubridate::ymd("2022-05-16"),
+                                                         by = "day")),
+                                             Symbol = c(base::rep("AAPL",3787)))
+Final <- dates2 %>%
+  dplyr::left_join(data, by = c("Dates" = "date", "Symbol" = "symbol"))%>%
+  dplyr::group_by(Symbol)%>%
+  tidyr::fill(adjusted, .direction = "downup")                      
+  
+signals <- Final %>%
   dplyr::mutate(EMA26 = TTR::EMA(adjusted, n = 26),
                 EMA12 = TTR::EMA(adjusted, n = 12),
                 MACDline = EMA12 - EMA26,
@@ -68,14 +84,17 @@ data<-tidyquant::tq_get("AAPL")%>%
   dplyr::mutate(signal = dplyr::case_when(dplyr::lag(MACDline) > dplyr::lag(SignalLine) & MACDline < SignalLine ~ "sell",
                                           TRUE ~"buy"))
 
-data2 <- data %>%dplyr::mutate(BenchmarkMoney = 100,
+data2 <- signals %>% dplyr::mutate(BenchmarkMoney = 100,
                       sss = adjusted/ lag(adjusted),
                       sss= ifelse(is.na(sss), 1, sss),
-                      BenchmarkMoney1 = cumprod(sss),
-                      StrategyMoney = 100)
+                      BenchmarkMoney1 = cumprod(sss))
+
+data3 <- data2 %>% dplyr::mutate(StrategyMoney = 100,
+                      sss1 = dplyr::case_when(signal == "sell" ~ 1,
+                                              signal == "buy" ~ sss))
                       
 
 options(scripen = 999)
 
-#still not complete
+#do not know if this is correct
                 
