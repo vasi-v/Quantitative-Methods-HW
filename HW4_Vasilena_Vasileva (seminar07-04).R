@@ -64,8 +64,6 @@ select2 <- Final %>%
   dplyr::slice_tail()%>%
   dplyr::ungroup()
 
-#Question: why do we have to rewrite the date? I know that without it nothing will happen,
-#but is it because in the "old" format was too "confusing" for R?
 
 #Your 4 suggestions for data formatting /Thanks for your help/
 #Date1 = substr( Dates , 1, 7)
