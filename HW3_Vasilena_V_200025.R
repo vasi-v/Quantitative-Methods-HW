@@ -68,30 +68,12 @@
 
   
 #5.7.1: not done  
+
+#not going to continue trying to solve the problems from the internet
+#focusing on the tasks in problem 4
   
 # Problem 4----
- #4.1. my thought process:
-  One <- not_cancelled %>% dplyr::group_by(carrier) %>%
-        dplyr::select(carrier,dest) %>%  
-        dplyr::count(dest)
- 
-    
-  #answer i have found: 
-   #adv3 <-not_cancelled %>% 
-    #group_by(carrier, dest) %>%
-    #summarise(n = n()) %>%
-    #mutate(rank = min_rank(desc(n))) %>%
-    #filter(rank == 1)
-    
-  #4.2.
-  
-  Two <- not_cancelled %>% dplyr::group_by(carrier) %>%
-    dplyr::select(carrier, max(not_cancelled$arr_delay))
-  
-  
-  
-  #still not done
-  
+ #in the following file in the repository
 
 
   
