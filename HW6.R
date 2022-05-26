@@ -31,7 +31,7 @@ SMA <- DATA %>%
 #Problem 2----
 
 #I am not very sure how to calculate the RSI formula 
-#we suppose that we shod not use the inbuilt function 
+#i suppose that we should not use the inbuilt function 
 #like i have done below
 
 RSI <- DATA %>%
