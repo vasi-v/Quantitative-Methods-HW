@@ -2,14 +2,17 @@
 library(tidyquant)
 library(tidyverse)
 
-info <-tidyquant::tq_get("GOOG",from = lubridate::ymd("2012-01-03"),
-                         to = lubridate::ymd("2021-10-26")) %>%
+FromDate <- "2012-01-03"
+ToDate <- "2021-10-26"
+
+info <-tidyquant::tq_get("GOOG",from = lubridate::ymd(FromDate),
+                         to = lubridate::ymd(ToDate)) %>%
        dplyr::select(symbol, date, adjusted)
 
-dates <- base::data.frame(Dates = base::rep(base::seq.Date(from = lubridate::ymd("2012-01-03"),
-                                                            to = lubridate::ymd("2021-10-26"),
+dates <- base::data.frame(Dates = base::rep(base::seq.Date(from = lubridate::ymd(FromDate),
+                                                            to = lubridate::ymd(ToDate),
                                                             by = "day")),
-                           Symbol = c(base::rep("GOOG",3585)))
+                           Symbol = c(base::rep("GOOG",base::as.numeric(lubridate::ymd(ToDate) - lubridate::ymd(FromDate))+ 1)))
 
 DATA <- dates %>%
   dplyr::left_join(info, by = c("Dates" = "date", "Symbol" = "symbol"))%>%
@@ -19,22 +22,26 @@ DATA <- dates %>%
 
 SMA <- DATA %>%
   dplyr::mutate(sma20 =TTR::SMA(adjusted, n = 20)) %>%
-  dplyr::filter(!is.na(sma20))%>%
-  dplyr::mutate(upperBound = sma20 + 2*stats::sd(dplyr::lag(sma20))) %>%
-  dplyr::mutate(lowerBound = sma20 - 2*stats::sd(dplyr::lag(sma20)))
+  dplyr::mutate(sd20 = RcppRoll::roll_sd(adjusted, n =20, align = "right", fill = NA),
+                UpperBound = sma20 + 2*sd20,
+                LowerBound = sma20 - 2*sd20)%>%
+  dplyr::filter(!is.na(sma20)) %>%
+  dplyr::mutate(signal = dplyr::case_when(dplyr::lag(adjusted) < dplyr::lag(UpperBound) & adjusted > UpperBound ~ "sell",
+                                          TRUE ~"buy"))
 
-#define upper and
-#lower bounds around it which are equal to SMA +-2 standard deviation
-#the past observations used to calculate the SMA.
-#I did not understand how to do the upper and lower bounds
+
 
 #Problem 2----
 
-#I am not very sure how to calculate the RSI formula 
-#i suppose that we should not use the inbuilt function 
-#like i have done below
+#Calculate the RSI using the instruction about the formula from here:
+  # https://www.investopedia.com/terms/r/rsi.asp
+  # Employ the following strategy and compare to a baseline strategy of buy and hold:
+  # If the RSI above 65 - sell.
+  # If the price goes below 35 - buy.
 
-RSI <- DATA %>%
-  dplyr::mutate(rsi=TTR::RSI(adjusted, n=20))
+#RSI <- DATA %>%
+  #dplyr::mutate(rsi=TTR::RSI(adjusted, n=20))
+
+#still not solved
 
   
