@@ -43,19 +43,18 @@ CorFunction(v,m)
 #A prime number is a whole number greater than 1 with only two factors – themselves and 1.
 #A prime number cannot be divided by any other positive integers without leaving a remainder, decimal or fraction.
 
-n <- 1:100
-Prime_num <- for (k in n){
-  for (i in 2:(k-1)){
-    if (base::isTRUE(k %% i == 0)){
-      print(k)
-    } else {
-      print("not prime")
+num <- 1:100
+Prime_num <- for(k in num){
+  for(denominator in 1:k){
+    if(k%%denominator == 0) {
+      print(paste(k, denominator))
     }
-}
+  }
 }
 
-#still not able to do the loop :/
-#the results after running it are...strange 
+
+#Despite your efforts, i am still unsure how to "filter" the numbers
+#sorry
 
 #Problem 3----
 
